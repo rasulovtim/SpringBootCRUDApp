@@ -2,6 +2,7 @@ package com.example.SpringBootCRUDApp.service;
 
 import com.example.SpringBootCRUDApp.dao.UserDao;
 import com.example.SpringBootCRUDApp.model.User;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
     public void add(User user) {
         userDao.add(user);
     }
+
     @Transactional
     @Override
     public void update(User user) {
@@ -35,19 +37,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User readUser(long id) {
-        return userDao.readUser(id);
+        try {
+            return userDao.readUser(id);
+        } catch (EntityNotFoundException ex) {
+            throw ex;
+        }
     }
 
     @Override
     @Transactional
-    public User delete(long id) {
-        User user = null;
+    public void delete(long id) {
         try {
-            user = userDao.delete(id);
-        } catch (NullPointerException e) {
-            e.printStackTrace();
+            userDao.delete(id);
+        } catch (EntityNotFoundException ex) {
+            throw ex;
         }
-        return user;
     }
 
 }
