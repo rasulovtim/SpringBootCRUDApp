@@ -35,7 +35,12 @@
             <td th:text="${user.age}"></td>
             <td th:text="${user.email}"></td>
             <td><a th:href="@{/users/user-update(id=${user.id})}">Edit</a></td>
-            <td><a th:href="@{/users/user-delete(id=${user.id})}">Delete</a></td>
+            <td>
+                <form th:action="@{/users/user-delete}" th:method="get">
+                    <input type="hidden" name="_method" th:value="post" />
+                    <a th:href="@{/users/user-delete(id=${user.id})}">Delete</a>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
